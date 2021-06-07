@@ -97,6 +97,8 @@ export function makeMapDispatchToProps(
       dispatch(actions.copyCell(payload)),
     pasteCell: (payload: { contentRef: string }) =>
       dispatch(actions.pasteCell(payload)),
+    splitCell: (payload: { id?: string; contentRef: string }) =>
+      dispatch(actions.splitCell(payload)),
     createCellBelow: (payload: {
       id?: string | undefined;
       cellType: CellType;

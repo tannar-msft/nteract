@@ -35,6 +35,8 @@ import { escapeCarriageReturnSafe } from "escape-carriage";
 import { fromJS, List, Map, RecordOf, Set } from "immutable";
 import has from "lodash.has";
 import { v4 as uuid } from "uuid";
+//import { Editor } from "@nteract/stateful-components"
+import CodeMirrorEditor from "@nteract/editor"
 
 type KeyPath = List<string | number>;
 type KeyPaths = List<KeyPath>;
@@ -789,6 +791,24 @@ function pasteCell(state: NotebookModel): RecordOf<DocumentRecordProps> {
   );
 }
 
+function splitCell(
+  state: NotebookModel,
+  action: actionTypes.SplitCell
+): RecordOf<DocumentRecordProps> {
+  const selectedId = action.payload.id || state.cellFocused;
+  const newId = uuid();
+
+  //let editor = Editor;
+  //const cursor = editor.getCursor();
+  const cell = state.getIn(["notebook", "cellMap", selectedId]);
+  if (!cell) {
+    return state;
+  }
+  return state.update("notebook", (notebook: ImmutableNotebook) =>
+    insertCellAfter(notebook, cell, newId, selectedId!)
+  );
+}
+
 function changeCellType(
   state: NotebookModel,
   action: actionTypes.ChangeCellType
@@ -928,6 +948,7 @@ type DocumentAction =
   | actionTypes.CopyCell
   | actionTypes.CutCell
   | actionTypes.PasteCell
+  | actionTypes.SplitCell
   | actionTypes.ChangeCellType
   | actionTypes.ToggleCellExpansion
   | actionTypes.AcceptPayloadMessage
@@ -1014,6 +1035,8 @@ export function notebook(
       return cutCell(state, action);
     case actionTypes.PASTE_CELL:
       return pasteCell(state);
+    case actionTypes.SPLIT_CELL:
+      return splitCell(state, action);
     case actionTypes.CHANGE_CELL_TYPE:
       return changeCellType(state, action);
     case actionTypes.TOGGLE_OUTPUT_EXPANSION:

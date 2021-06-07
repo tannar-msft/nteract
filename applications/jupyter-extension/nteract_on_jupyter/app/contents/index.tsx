@@ -254,6 +254,7 @@ const mapDispatchToProps = (
         ),
       CUT_CELL: () => dispatch(actions.cutCell({ contentRef })),
       DELETE_CELL: () => dispatch(actions.deleteCell({ contentRef })),
+      SPLIT_CELL: () => dispatch(actions.splitCell({ contentRef })),
       EXECUTE_ALL_CELLS: () =>
         dispatch(actions.executeAllCells({ contentRef })),
       INTERRUPT_KERNEL: () => dispatch(actions.interruptKernel({})),

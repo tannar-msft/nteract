@@ -87,3 +87,11 @@ export const NewTextCellBelow: DesktopCommand<ReqContent> = {
     source: "",
   }),
 };
+
+export const SplitCell: DesktopCommand<ReqContent> = {
+  name: "SplitCell",
+  props: {
+    contentRef: "required",
+  },
+  makeAction: actions.splitCell,
+};

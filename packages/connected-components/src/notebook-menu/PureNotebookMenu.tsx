@@ -28,6 +28,7 @@ const {
   COPY_CELL,
   CUT_CELL,
   PASTE_CELL,
+  SPLIT_CELL,
   CREATE_CODE_CELL,
   CREATE_MARKDOWN_CELL,
   SET_CELL_TYPE_CODE,
@@ -70,6 +71,7 @@ export interface PureNotebookMenuProps {
   cutCell?: (payload: { id?: string; contentRef: string }) => void;
   copyCell?: (payload: { id?: string; contentRef: string }) => void;
   pasteCell?: (payload: { contentRef: string }) => void;
+  splitCell?: (payload: { id?: string; contentRef: string }) => void;
   createCellBelow?: (payload: {
     id?: string | undefined;
     cellType: CellType;
@@ -154,6 +156,7 @@ class PureNotebookMenu extends React.PureComponent<PureNotebookMenuProps> {
       onPublish,
       openAboutModal,
       pasteCell,
+      splitCell,
       setTheme,
       changeCellType,
       restartKernel,
@@ -185,6 +188,9 @@ class PureNotebookMenu extends React.PureComponent<PureNotebookMenuProps> {
         break;
       case PASTE_CELL:
         pasteCell && pasteCell({ contentRef: currentContentRef });
+        break;
+      case SPLIT_CELL:
+        splitCell && splitCell({ contentRef: currentContentRef });
         break;
       case CREATE_CODE_CELL:
         createCellBelow &&
@@ -384,6 +390,20 @@ class PureNotebookMenu extends React.PureComponent<PureNotebookMenuProps> {
                 }
                 text={MENU_ITEM_LABELS.PASTE_CELL}
                 icon={CLIPBOARD}
+              />
+              <MenuItem
+                onClick={(e: SyntheticEvent) =>
+                  this.handleActionClick(e, SPLIT_CELL)
+                }
+                text={MENU_ITEM_LABELS.SPLIT_CELL}
+                icon={DUPLICATE}
+              />
+              <MenuItem
+                onClick={(e: SyntheticEvent) =>
+                  this.handleActionClick(e, SPLIT_CELL)
+                }
+                text={MENU_ITEM_LABELS.SPLIT_CELL}
+                icon={DUPLICATE}
               />
               <MenuDivider />
               <MenuItem text="Change Cell Type" icon={SWAP_HORIZONTAL}>

@@ -317,6 +317,7 @@ export const byRef = (
     case actionTypes.COPY_CELL:
     case actionTypes.CUT_CELL:
     case actionTypes.PASTE_CELL:
+    case actionTypes.SPLIT_CELL:
     case actionTypes.CHANGE_CELL_TYPE:
     case actionTypes.TOGGLE_OUTPUT_EXPANSION:
     case actionTypes.TOGGLE_TAG_IN_CELL:

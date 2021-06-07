@@ -88,6 +88,7 @@ export const menu: MenuDefinition = [
     ["Cut Cell", commands.CutCell],
     ["Paste Cell", commands.PasteCell],
     ["Delete Cell", commands.DeleteCell],
+    ["Split Cell", commands.SplitCell],
   ]],
   ["Cell", [
     ["Change Cell Type to Code", commands.ChangeCellToCode],
