@@ -1,11 +1,13 @@
 {
   "name": "@nteract/actions",
-  "version": "7.0.10",
+  "version": "7.1.0",
   "description": "A collection of actions",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "nteractDesktop": "src/index.ts",
-  "scripts": {},
+  "scripts": {
+    "release": "semantic-release -e semantic-release-monorepo --tag-format='@nteract/actions@${version}'"
+  },
   "keywords": [],
   "author": "Safia Abdalla <safia@safia.rocks>",
   "license": "BSD-3-Clause",
@@ -13,13 +15,89 @@
     "access": "public"
   },
   "dependencies": {
-    "@nteract/commutable": "^7.4.4",
-    "@nteract/messaging": "^7.0.18",
-    "@nteract/types": "^7.1.8",
+    "@nteract/commutable": "^7.4.5",
+    "@nteract/messaging": "^7.0.19",
+    "@nteract/types": "^7.1.9",
     "immutable": "^4.0.0-rc.12",
-    "rx-jupyter": "^5.5.20"
+    "rx-jupyter": "^5.5.21"
   },
   "devDependencies": {
     "utility-types": "^3.10.0"
+  },
+  "release": {
+    "plugins": [
+      [
+        "@semantic-release/commit-analyzer",
+        {
+          "preset": "conventionalcommits"
+        }
+      ],
+      [
+        "@semantic-release/release-notes-generator",
+        {
+          "preset": "conventionalcommits",
+          "presetConfig": {
+            "header": "Release Notes",
+            "types": [
+              {
+                "type": "feat",
+                "section": "Features"
+              },
+              {
+                "type": "fix",
+                "section": "Bug Fixes"
+              },
+              {
+                "type": "chore",
+                "hidden": true
+              },
+              {
+                "type": "docs",
+                "hidden": true
+              },
+              {
+                "type": "style",
+                "hidden": true
+              },
+              {
+                "type": "refactor",
+                "hidden": true
+              },
+              {
+                "type": "perf",
+                "hidden": true
+              },
+              {
+                "type": "test",
+                "hidden": true
+              }
+            ]
+          },
+          "parserOpts": {
+            "noteKeywords": [
+              "BREAKING CHANGE",
+              "BREAKING CHANGES",
+              "BREAKING"
+            ]
+          },
+          "writerOpts": {
+            "commitsSort": [
+              "subject",
+              "scope"
+            ]
+          }
+        }
+      ],
+      "@semantic-release/npm",
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "package.json"
+          ],
+          "message": "chore(release): ${nextRelease.version}"
+        }
+      ]
+    ]
   }
 }

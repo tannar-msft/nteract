@@ -19,6 +19,8 @@ import { loadFullMenu, loadTrayMenu } from "./menu";
 import prepareEnv from "./prepare-env";
 import configureStore from "./store";
 
+import installExtension, { REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
+
 // FIXME: Needed to load zeromq for now, but deprecated and to be removed in
 //        electron@11. Need to figure out how to get a version of zmq that
 //        complies with the new requirements for native modules.
@@ -254,4 +256,10 @@ appAndKernelSpecsReady$.subscribe(() => {
 
   Menu.setApplicationMenu(loadFullMenu());
   tray.setContextMenu(loadTrayMenu());
+});
+
+app.on('ready', () => {
+  installExtension([REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS], { loadExtensionOptions: { allowFileAccess: true } })
+      .then((name) => console.log(`Added Extension:  ${name}`))
+      .catch((err) => console.log('An error occurred: ', err));
 });

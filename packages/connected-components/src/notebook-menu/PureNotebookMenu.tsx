@@ -34,6 +34,7 @@ const {
   SET_CELL_TYPE_CODE,
   SET_CELL_TYPE_MARKDOWN,
   EXECUTE_ALL_CELLS,
+  EXECUTE_ALL_CELLS_ABOVE,
   EXECUTE_ALL_CELLS_BELOW,
   UNHIDE_ALL,
   CLEAR_ALL_OUTPUTS,
@@ -61,6 +62,7 @@ export interface PureNotebookMenuProps {
   downloadNotebook?: (payload: { contentRef: string }) => void;
   executeCell?: (payload: { id: string; contentRef: string }) => void;
   executeAllCells?: (payload: { contentRef: string }) => void;
+  executeAllCellsAbove?: (payload: { contentRef: string }) => void;
   executeAllCellsBelow?: (payload: { contentRef: string }) => void;
   clearAllOutputs?: (payload: { contentRef: string }) => void;
   unhideAll?: (payload: {
@@ -150,6 +152,7 @@ class PureNotebookMenu extends React.PureComponent<PureNotebookMenuProps> {
       createCellBelow,
       cutCell,
       executeAllCells,
+      executeAllCellsAbove,
       executeAllCellsBelow,
       clearAllOutputs,
       unhideAll,
@@ -225,6 +228,10 @@ class PureNotebookMenu extends React.PureComponent<PureNotebookMenuProps> {
         break;
       case EXECUTE_ALL_CELLS:
         executeAllCells && executeAllCells({ contentRef: currentContentRef });
+        break;
+      case EXECUTE_ALL_CELLS_ABOVE:
+        executeAllCellsAbove &&
+          executeAllCellsAbove({ contentRef: currentContentRef });
         break;
       case EXECUTE_ALL_CELLS_BELOW:
         executeAllCellsBelow &&
@@ -460,6 +467,13 @@ class PureNotebookMenu extends React.PureComponent<PureNotebookMenuProps> {
                   this.handleActionClick(e, EXECUTE_ALL_CELLS)
                 }
                 text={MENU_ITEM_LABELS.EXECUTE_ALL_CELLS}
+                icon={PLAY}
+              />
+              <MenuItem
+                onClick={(e: SyntheticEvent) =>
+                  this.handleActionClick(e, EXECUTE_ALL_CELLS_ABOVE)
+                }
+                text={MENU_ITEM_LABELS.EXECUTE_ALL_CELLS_ABOVE}
                 icon={PLAY}
               />
               <MenuItem

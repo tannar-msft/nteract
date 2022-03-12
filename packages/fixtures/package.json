@@ -1,10 +1,12 @@
 {
   "name": "@nteract/fixtures",
-  "version": "2.3.18",
+  "version": "2.3.19",
   "description": "",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "scripts": {},
+  "scripts": {
+    "release": "semantic-release -e semantic-release-monorepo --tag-format='@nteract/fixtures@${version}'"
+  },
   "keywords": [],
   "author": "Safia Abdalla <safia@safia.rocks>",
   "license": "BSD-3-Clause",
@@ -12,8 +14,84 @@
     "access": "public"
   },
   "dependencies": {
-    "@nteract/commutable": "^7.4.4",
-    "@nteract/reducers": "^5.1.8",
-    "@nteract/types": "^7.1.8"
+    "@nteract/commutable": "^7.4.5",
+    "@nteract/reducers": "^5.1.9",
+    "@nteract/types": "^7.1.9"
+  },
+  "release": {
+    "plugins": [
+      [
+        "@semantic-release/commit-analyzer",
+        {
+          "preset": "conventionalcommits"
+        }
+      ],
+      [
+        "@semantic-release/release-notes-generator",
+        {
+          "preset": "conventionalcommits",
+          "presetConfig": {
+            "header": "Release Notes",
+            "types": [
+              {
+                "type": "feat",
+                "section": "Features"
+              },
+              {
+                "type": "fix",
+                "section": "Bug Fixes"
+              },
+              {
+                "type": "chore",
+                "hidden": true
+              },
+              {
+                "type": "docs",
+                "hidden": true
+              },
+              {
+                "type": "style",
+                "hidden": true
+              },
+              {
+                "type": "refactor",
+                "hidden": true
+              },
+              {
+                "type": "perf",
+                "hidden": true
+              },
+              {
+                "type": "test",
+                "hidden": true
+              }
+            ]
+          },
+          "parserOpts": {
+            "noteKeywords": [
+              "BREAKING CHANGE",
+              "BREAKING CHANGES",
+              "BREAKING"
+            ]
+          },
+          "writerOpts": {
+            "commitsSort": [
+              "subject",
+              "scope"
+            ]
+          }
+        }
+      ],
+      "@semantic-release/npm",
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "package.json"
+          ],
+          "message": "chore(release): ${nextRelease.version}"
+        }
+      ]
+    ]
   }
 }

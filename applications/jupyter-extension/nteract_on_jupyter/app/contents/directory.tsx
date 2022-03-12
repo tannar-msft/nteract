@@ -89,6 +89,7 @@ export class DirectoryApp extends React.PureComponent<DirectoryProps> {
                   href={urljoin(this.props.appBase, entry.path)}
                   // When it's a notebook, we open a new tab
                   target={entry.type === "notebook" ? "_blank" : undefined}
+                  rel="noreferrer"
                 >
                   {entry.name}
                 </a>

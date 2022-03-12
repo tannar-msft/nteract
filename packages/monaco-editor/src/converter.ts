@@ -1,5 +1,5 @@
 import Immutable from "immutable";
-import * as monaco from "monaco-editor";
+import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 
 /**
  * Code Mirror to Monaco constants.
@@ -30,7 +30,7 @@ export function mapCodeMirrorModeToMonaco(mode: any): string {
   }
   // Immutable Map
   else if (Immutable.Map.isMap(mode) && mode.has("name")) {
-    language = mode.get("name");
+    language = mode.get("name") as string;
   }
 
   // Need to handle "ipython" as a special case since it is not a registered language

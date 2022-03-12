@@ -2,8 +2,10 @@ import { emptyMarkdownCell } from "@nteract/commutable";
 import { actions } from "@nteract/core";
 import { mount, shallow } from "enzyme";
 import React from "react";
+import { Provider } from "react-redux";
 
-import { cell } from "@nteract/selectors";
+import { fixtureStore } from "@nteract/fixtures";
+
 import DraggableCell, {
   cellTarget,
   DraggableCellView,
@@ -26,7 +28,10 @@ const dragDropManager = {
 
 describe("DraggableCell", () => {
   test("can be rendered", () => {
-    const cell = shallow(<DraggableCell cell={emptyMarkdownCell} />, {
+    const store = fixtureStore();
+    const cell = shallow(<Provider store={store}>
+      <DraggableCell cell={emptyMarkdownCell} />
+      </Provider>, {
       context: { dragDropManager }
     });
     expect(cell).not.toBeNull();

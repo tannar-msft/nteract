@@ -36,7 +36,7 @@ const mainConfig = {
     ],
   },
   resolve: {
-    mainFields: ["nteractDesktop", "es2015", "jsnext:main", "module", "main"],
+    mainFields: ["nteractDesktop", "main", "es2015", "jsnext:main", "module"],
     extensions: [".js", ".jsx", ".ts", ".tsx"],
     alias: {
       ...configurator.mergeDefaultAliases(),
@@ -102,6 +102,12 @@ const rendererConfig = {
       // Max. one of those two, please
       react: path.resolve('./node_modules/react'),
       "react-dom": path.resolve('./node_modules/react-dom'),
+      "react-redux": path.resolve(
+        "..",
+        "..",
+        "node_modules",
+        "react-redux"
+      ),
     },
   },
   plugins: [

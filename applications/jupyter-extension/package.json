@@ -1,6 +1,6 @@
 {
   "name": "@nteract/nbextension",
-  "version": "1.15.0",
+  "version": "1.15.1",
   "description": "nteract on jupyter, as an extension",
   "scripts": {
     "build:python": "python setup.py sdist && python setup.py bdist_wheel",
@@ -13,7 +13,6 @@
     "dry-run": true
   },
   "private": true,
-  "repository": "https://github.com/nteract/nteract/tree/master/applications/jupyter-extension",
   "author": "Kyle Kelley <rgbkrk@gmail.com>",
   "license": "BSD-3-Clause"
 }

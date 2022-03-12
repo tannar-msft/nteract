@@ -1,6 +1,6 @@
 import { mount } from "enzyme";
-import Immutable from "immutable";
-import React from "react";
+import * as Immutable from "immutable";
+import * as React from "react";
 
 import { PromptRequest } from "../../src/outputs/input-prompts";
 
@@ -9,7 +9,7 @@ describe("PromptRequest", () => {
     const component = mount(<PromptRequest prompts={Immutable.List([])} />);
     expect(component.find("form")).toHaveLength(0);
   });
-  it("renders a form for each prompt", () => {
+  it("renders one form when given multiple prompts", () => {
     const component = mount(
       <PromptRequest
         prompts={Immutable.List([
@@ -24,6 +24,6 @@ describe("PromptRequest", () => {
         ])}
       />
     );
-    expect(component.find("form")).toHaveLength(2);
+    expect(component.find("form")).toHaveLength(1);
   });
 });

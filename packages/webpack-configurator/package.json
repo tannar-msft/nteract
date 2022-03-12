@@ -1,13 +1,14 @@
 {
   "name": "@nteract/webpack-configurator",
-  "version": "3.1.25",
+  "version": "3.2.0",
   "main": "index.js",
   "description": "a common webpack configurator for nteract applications",
   "files": [
     "*.js"
   ],
   "scripts": {
-    "test": "echo 'write a basic integration test please' && node -e 'process.exit(1)'"
+    "test": "echo 'write a basic integration test please' && node -e 'process.exit(1)'",
+    "release": "semantic-release -e semantic-release-monorepo --tag-format='@nteract/webpack-configurator@${version}'"
   },
   "publishConfig": {
     "access": "public"
@@ -17,5 +18,81 @@
   },
   "keywords": [],
   "author": "Kyle Kelley <rgbkrk@gmail.com>",
-  "license": "BSD-3-Clause"
+  "license": "BSD-3-Clause",
+  "release": {
+    "plugins": [
+      [
+        "@semantic-release/commit-analyzer",
+        {
+          "preset": "conventionalcommits"
+        }
+      ],
+      [
+        "@semantic-release/release-notes-generator",
+        {
+          "preset": "conventionalcommits",
+          "presetConfig": {
+            "header": "Release Notes",
+            "types": [
+              {
+                "type": "feat",
+                "section": "Features"
+              },
+              {
+                "type": "fix",
+                "section": "Bug Fixes"
+              },
+              {
+                "type": "chore",
+                "hidden": true
+              },
+              {
+                "type": "docs",
+                "hidden": true
+              },
+              {
+                "type": "style",
+                "hidden": true
+              },
+              {
+                "type": "refactor",
+                "hidden": true
+              },
+              {
+                "type": "perf",
+                "hidden": true
+              },
+              {
+                "type": "test",
+                "hidden": true
+              }
+            ]
+          },
+          "parserOpts": {
+            "noteKeywords": [
+              "BREAKING CHANGE",
+              "BREAKING CHANGES",
+              "BREAKING"
+            ]
+          },
+          "writerOpts": {
+            "commitsSort": [
+              "subject",
+              "scope"
+            ]
+          }
+        }
+      ],
+      "@semantic-release/npm",
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "package.json"
+          ],
+          "message": "chore(release): ${nextRelease.version}"
+        }
+      ]
+    ]
+  }
 }

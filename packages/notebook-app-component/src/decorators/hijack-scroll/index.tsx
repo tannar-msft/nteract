@@ -4,7 +4,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
-
+import scrollIntoView from "scroll-into-view-if-needed";
 import { actions, selectors, ContentRef, AppState } from "@nteract/core";
 
 interface ComponentProps {
@@ -44,8 +44,12 @@ export class HijackScroll extends React.Component<Props> {
         // This is only valid in Chrome, WebKit
         (this.el as any).scrollIntoViewIfNeeded();
       } else if (this.el) {
-        // Make a best guess effort for older platforms
-        this.el.scrollIntoView();
+        // Use Pony-fill to scroll into view if needed on older browsers to mimick behavior.
+        scrollIntoView(this.el, {
+          scrollMode: "if-needed",
+          block: "nearest",
+          inline: "nearest",
+        });
       }
     }
   }

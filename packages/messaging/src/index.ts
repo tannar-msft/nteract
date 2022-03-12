@@ -51,7 +51,7 @@ export function createCommOpenMessage(
 export function createCommMessage(
   comm_id: string,
   data: any = {},
-  buffers: Uint8Array = new Uint8Array([])
+  buffers: []
 ) {
   return createMessage("comm_msg", { content: { comm_id, data }, buffers });
 }

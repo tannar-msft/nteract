@@ -1,14 +1,15 @@
 {
   "name": "@nteract/messaging",
-  "version": "7.0.18",
+  "version": "7.0.20",
   "description": "Messaging mechanics for nteract apps (jupyter spec)",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "nteractDesktop": "src/index.ts",
-  "scripts": {},
-  "repository": "https://github.com/nteract/nteract/tree/master/packages/messaging",
+  "scripts": {
+    "release": "semantic-release -e semantic-release-monorepo --tag-format='@nteract/messaging@${version}'"
+  },
   "dependencies": {
-    "@nteract/types": "^7.1.8",
+    "@nteract/types": "^7.1.9",
     "@types/uuid": "^8.0.0",
     "lodash.clonedeep": "^4.5.0",
     "rxjs": "^6.6.0",
@@ -24,5 +25,81 @@
     "jupyter"
   ],
   "author": "Kyle Kelley <rgbkrk@gmail.com>",
-  "license": "BSD-3-Clause"
+  "license": "BSD-3-Clause",
+  "release": {
+    "plugins": [
+      [
+        "@semantic-release/commit-analyzer",
+        {
+          "preset": "conventionalcommits"
+        }
+      ],
+      [
+        "@semantic-release/release-notes-generator",
+        {
+          "preset": "conventionalcommits",
+          "presetConfig": {
+            "header": "Release Notes",
+            "types": [
+              {
+                "type": "feat",
+                "section": "Features"
+              },
+              {
+                "type": "fix",
+                "section": "Bug Fixes"
+              },
+              {
+                "type": "chore",
+                "hidden": true
+              },
+              {
+                "type": "docs",
+                "hidden": true
+              },
+              {
+                "type": "style",
+                "hidden": true
+              },
+              {
+                "type": "refactor",
+                "hidden": true
+              },
+              {
+                "type": "perf",
+                "hidden": true
+              },
+              {
+                "type": "test",
+                "hidden": true
+              }
+            ]
+          },
+          "parserOpts": {
+            "noteKeywords": [
+              "BREAKING CHANGE",
+              "BREAKING CHANGES",
+              "BREAKING"
+            ]
+          },
+          "writerOpts": {
+            "commitsSort": [
+              "subject",
+              "scope"
+            ]
+          }
+        }
+      ],
+      "@semantic-release/npm",
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "package.json"
+          ],
+          "message": "chore(release): ${nextRelease.version}"
+        }
+      ]
+    ]
+  }
 }

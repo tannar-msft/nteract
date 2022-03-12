@@ -52,7 +52,7 @@ export const PureTransformMedia = (
     <Media
       {...mediaActions}
       data={data}
-      metadata={metadata}
+      metadata={metadata?.toJS()}
       theme={theme}
       contentRef={contentRef}
       id={id}

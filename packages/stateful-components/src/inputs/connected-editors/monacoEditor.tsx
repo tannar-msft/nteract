@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 
 import { selectors, AppState, ContentRef } from "@nteract/core";
-import MonacoEditor, {LightThemeName, DarkThemeName, Mode, mapCodeMirrorModeToMonaco} from "@nteract/monaco-editor";
+import * as monaco from "@nteract/monaco-editor";
 
 import { userTheme } from "../../config-options";
 import { Channels } from "@nteract/messaging";
@@ -25,12 +25,12 @@ function getMonacoTheme(theme?: string) : string {
   if (typeof theme === "string") {
     switch (theme) {
       case "dark":
-        return DarkThemeName;
+        return monaco.DarkThemeName;
       default:
-        return LightThemeName;
+        return monaco.LightThemeName;
     }
   } else {
-    return LightThemeName;
+    return monaco.LightThemeName;
   }
 }
 
@@ -39,15 +39,15 @@ const makeMapStateToProps = (initialState: AppState, ownProps: ComponentProps) =
   function mapStateToProps(state: any) {
     const model = selectors.model(state, { contentRef });
     const theme = userTheme(state) || "vs";
-    let wordWrap = "on";
-    let editorMode: any = Mode.raw;
+    let wordWrap:monaco.editor.IEditorOptions["wordWrap"] = "on";
+    let editorMode: string = monaco.Mode.raw;
     if (model && model.type === "notebook") {
       const cell = selectors.notebook.cellById(model, { id });
       if (cell) {
         // Bring all changes to the options based on cell type 
         switch (cell.cell_type) {
           case "markdown":
-            editorMode = Mode.markdown;
+            editorMode = monaco.Mode.markdown;
             break;
           case "code": {
             wordWrap = "off";
@@ -59,16 +59,16 @@ const makeMapStateToProps = (initialState: AppState, ownProps: ComponentProps) =
                 kernel && kernel.info
                 ? kernel.info.codemirrorMode
                 : selectors.notebook.codeMirrorMode(model);
-            editorMode = mapCodeMirrorModeToMonaco(mode);
+            editorMode = monaco.mapCodeMirrorModeToMonaco(mode);
             break;
           }
           default:
-            editorMode = Mode.raw;
+            editorMode = monaco.Mode.raw;
             break;
           }
         }
       }
-    const defaultEditorOptions = {
+    const defaultEditorOptions: monaco.editor.IEditorOptions = {
       wordWrap,
       autoClosingBrackets: "never"
     }
@@ -91,4 +91,4 @@ const makeMapStateToProps = (initialState: AppState, ownProps: ComponentProps) =
   return mapStateToProps;
 };
 
-export default connect(makeMapStateToProps)(MonacoEditor);
+export default connect(makeMapStateToProps)(monaco.default);

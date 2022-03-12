@@ -1,12 +1,13 @@
 {
   "name": "@mybinder/host-cache",
-  "version": "2.1.35",
+  "version": "2.1.36",
   "description": "Local Storage backed cache of binder hosts",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "nteractDesktop": "src/index.js",
-  "scripts": {},
-  "repository": "https://github.com/nteract/nteract/tree/master/packages/host-cache",
+  "scripts": {
+    "release": "semantic-release -e semantic-release-monorepo --tag-format='@mybinder/host-cache@${version}'"
+  },
   "keywords": [
     "mybinder",
     "notebooks",
@@ -23,8 +24,84 @@
     "access": "public"
   },
   "dependencies": {
-    "rx-binder": "^4.0.14",
-    "rx-jupyter": "^5.5.20",
+    "rx-binder": "^4.0.15",
+    "rx-jupyter": "^5.5.21",
     "rxjs": "^6.3.3"
+  },
+  "release": {
+    "plugins": [
+      [
+        "@semantic-release/commit-analyzer",
+        {
+          "preset": "conventionalcommits"
+        }
+      ],
+      [
+        "@semantic-release/release-notes-generator",
+        {
+          "preset": "conventionalcommits",
+          "presetConfig": {
+            "header": "Release Notes",
+            "types": [
+              {
+                "type": "feat",
+                "section": "Features"
+              },
+              {
+                "type": "fix",
+                "section": "Bug Fixes"
+              },
+              {
+                "type": "chore",
+                "hidden": true
+              },
+              {
+                "type": "docs",
+                "hidden": true
+              },
+              {
+                "type": "style",
+                "hidden": true
+              },
+              {
+                "type": "refactor",
+                "hidden": true
+              },
+              {
+                "type": "perf",
+                "hidden": true
+              },
+              {
+                "type": "test",
+                "hidden": true
+              }
+            ]
+          },
+          "parserOpts": {
+            "noteKeywords": [
+              "BREAKING CHANGE",
+              "BREAKING CHANGES",
+              "BREAKING"
+            ]
+          },
+          "writerOpts": {
+            "commitsSort": [
+              "subject",
+              "scope"
+            ]
+          }
+        }
+      ],
+      "@semantic-release/npm",
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "package.json"
+          ],
+          "message": "chore(release): ${nextRelease.version}"
+        }
+      ]
+    ]
   }
 }

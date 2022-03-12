@@ -156,12 +156,7 @@ _Source: http://git-scm.com/book/ch5-2.html_
 
 ### DO
 
-- Write the summary line and description of what you have done in the
-  imperative mode, that is as if you were commanding. Start the line
-  with "Fix", "Add", "Change" instead of "Fixed", "Added", "Changed".
-- Always leave the second line blank.
-- Line break the commit message (to make the commit message readable
-  without having to scroll horizontally in gitk).
+- Adhere to conventional commit guidelines when publishing commits.
 
 ### DON'T
 

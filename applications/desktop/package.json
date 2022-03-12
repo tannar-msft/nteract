@@ -1,9 +1,8 @@
 {
   "name": "nteract",
-  "version": "0.29.0",
+  "version": "0.29.1",
   "description": "Interactive literate coding notebook!",
   "main": "./lib/webpacked-main.js",
-  "repository": "nteract/nteract",
   "keywords": [
     "jupyter",
     "electron",
@@ -137,8 +136,10 @@
     "@blueprintjs/core": "^3.7.0",
     "@nteract/data-explorer": "^8.0.0",
     "@nteract/examples": "3.2.0",
+    "@nteract/jupyter-widgets": "^4.1.19",
     "@nteract/mathjax": "4.0.16",
     "@nteract/transform-geojson": "^5.1.13",
+    "@nteract/transform-model-debug": "^5.0.1",
     "@nteract/transform-plotly": "^6.1.10",
     "@nteract/transform-vdom": "^4.0.15",
     "@nteract/transform-vega": "^7.0.10",
@@ -152,7 +153,9 @@
     "mathjax-electron": "^3.0.0",
     "nteract-assets": "^4.0.0",
     "plist": "^3.0.1",
-    "rxjs": "^6.6.0"
+    "rxjs": "^6.6.0",
+    "symbol-observable": "^4.0.0",
+    "yargs": "17.1.1"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.0",
@@ -160,7 +163,8 @@
     "@types/lodash.sortby": "^4.7.6",
     "@types/lodash.throttle": "^4.1.6",
     "@types/plist": "^3.0.2",
-    "electron": "9.4.4",
+    "electron": "11.5.0",
+    "electron-devtools-installer": "^3.2.0",
     "electron-notarize": "^1.0.0",
     "file-loader": "^6.0.0",
     "monaco-editor-webpack-plugin": "3.0.1",

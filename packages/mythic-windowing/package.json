@@ -1,12 +1,13 @@
 {
   "name": "@nteract/mythic-windowing",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "A windowing system based on electron and the myths redux framework",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "nteractDesktop": "src/index.ts",
-  "scripts": {},
-  "repository": "https://github.com/nteract/nteract/tree/master/packages/mythic-windowing",
+  "scripts": {
+    "release": "semantic-release -e semantic-release-monorepo --tag-format='@nteract/mythic-windowing@${version}'"
+  },
   "keywords": [
     "nteract"
   ],
@@ -14,12 +15,88 @@
     "access": "public"
   },
   "dependencies": {
-    "@nteract/myths": "^0.2.10",
+    "@nteract/myths": "^0.2.11",
     "file-url": "^4.0.0"
   },
   "peerDependencies": {
     "electron": "7.3.2"
   },
   "author": "nteract contributers",
-  "license": "BSD-3-Clause"
+  "license": "BSD-3-Clause",
+  "release": {
+    "plugins": [
+      [
+        "@semantic-release/commit-analyzer",
+        {
+          "preset": "conventionalcommits"
+        }
+      ],
+      [
+        "@semantic-release/release-notes-generator",
+        {
+          "preset": "conventionalcommits",
+          "presetConfig": {
+            "header": "Release Notes",
+            "types": [
+              {
+                "type": "feat",
+                "section": "Features"
+              },
+              {
+                "type": "fix",
+                "section": "Bug Fixes"
+              },
+              {
+                "type": "chore",
+                "hidden": true
+              },
+              {
+                "type": "docs",
+                "hidden": true
+              },
+              {
+                "type": "style",
+                "hidden": true
+              },
+              {
+                "type": "refactor",
+                "hidden": true
+              },
+              {
+                "type": "perf",
+                "hidden": true
+              },
+              {
+                "type": "test",
+                "hidden": true
+              }
+            ]
+          },
+          "parserOpts": {
+            "noteKeywords": [
+              "BREAKING CHANGE",
+              "BREAKING CHANGES",
+              "BREAKING"
+            ]
+          },
+          "writerOpts": {
+            "commitsSort": [
+              "subject",
+              "scope"
+            ]
+          }
+        }
+      ],
+      "@semantic-release/npm",
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "package.json"
+          ],
+          "message": "chore(release): ${nextRelease.version}"
+        }
+      ]
+    ]
+  }
 }

@@ -99,9 +99,9 @@ export default class CodeCell extends React.Component<ComponentProps> {
      * Users can continue to add the editorSlots as children
      */
     const editor = children?.editor;
-    const pagers = children?.pagers || defaults.pagers;
-    const inputPrompts = children?.pagers || defaults.inputPrompts;
-    const outputs = children?.outputs || defaults.outputs;
+    const pagers = children?.pagers ?? defaults.pagers;
+    const inputPrompts = children?.inputPrompts ?? defaults.inputPrompts;
+    const outputs = children?.outputs ?? defaults.outputs;
     const toolbar = children?.toolbar;
 
     return (

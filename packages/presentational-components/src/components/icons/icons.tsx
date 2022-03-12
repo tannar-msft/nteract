@@ -11,12 +11,20 @@ export const Markdown = (props: any) => {
   );
 };
 
-export const Delete = (props: any) => {
+export const Delete = () => {
   return (
-    <svg width={16} height={16} fill="none" {...props}>
+    <svg width={16} height={16} fill="none">
       <path
-        d="M2.346 11.5v-7h1.538l1.539 2.423L6.96 4.5h1.538v7H6.962V7.23L5.423 9.155 3.884 7.23V11.5H2.346zm9.269 0L9.499 9h1.25V4.5h1.5V9h1.25l-1.884 2.5z"
-        fill="#EEEFF0"
+        d="M13.5 5.5H11.5M2.5 5.5H4.5M4.5 5.5V13.5C4.5 14.0523 4.94772 14.5 5.5 14.5H10.5C11.0523 14.5 11.5 14.0523 11.5 13.5V5.5M4.5 5.5H11.5"
+        stroke="#FF7474"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M10.5 5.5L10 2.5H6L5.5 5.5"
+        stroke="#FF7474"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
@@ -59,7 +67,7 @@ export const AddCell = ({ below = true }) => {
         strokeLinejoin="round"
       />
       <path
-        d="M10 8.5l-2 2-2-2"
+        d="M10.5 8.5l-2 2-2-2"
         stroke="#fff"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -74,7 +82,7 @@ export const AddCell = ({ below = true }) => {
         strokeLinejoin="round"
       />
       <path
-        d="M10 8.5l-2 2-2-2"
+        d="M10.5 6.5l-2-2-2 2"
         stroke="#fff"
         strokeLinecap="round"
         strokeLinejoin="round"

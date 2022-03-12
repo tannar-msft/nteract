@@ -4,6 +4,7 @@ import { makeTransformsRecord } from "@nteract/types";
 import { List, Map } from "immutable";
 import { Action, Reducer } from "redux";
 import { combineReducers } from "redux-immutable";
+import * as React from "react";
 
 export const byId = (
   state = Map<string, React.ComponentClass>(),

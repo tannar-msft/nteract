@@ -61,7 +61,7 @@ function getFilters(handlers: any): Filter[] {
     },
     {
       id: actions.CREATE_CELL_ABOVE,
-      icon: <Icons.AddCell />,
+      icon: <Icons.AddCell below={false} />,
       onClick: () => {
         handlers[actions.CREATE_CELL_ABOVE]();
       },

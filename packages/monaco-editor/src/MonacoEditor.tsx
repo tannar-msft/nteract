@@ -1,6 +1,6 @@
 import { Channels } from "@nteract/messaging";
 import { CellType, CellId } from "@nteract/commutable";
-import * as monaco from "monaco-editor";
+import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import * as React from "react";
 import { completionProvider } from "./completions/completionItemProvider";
 import { ContentRef } from "@nteract/core";
@@ -114,47 +114,37 @@ export default class MonacoEditor extends React.Component<IMonacoProps> {
   }
 
   onDidChangeModelContent(e: monaco.editor.IModelContentChangedEvent) {
-    if (this.editor) {
-      if (this.props.onChange) {
+    if (this.editor && this.props.onChange) {
         this.props.onChange(this.editor.getValue(), e);
-      }
-
-      this.calculateHeight();
     }
   }
 
   /**
-   * Adjust the height of editor
+   * Adjust the height of editor container
    *
-   * @remarks
-   * The way to determine how many lines we should display in editor:
-   * If numberOfLines is not set or set to 0, we adjust the height to fit the content
-   * If numberOfLines is specified we respect that setting
+   * @param height Expected height of the editor container
+   * We check the editor's content height and set the container height to match it
+   *
    */
-  calculateHeight() {
+  calculateHeight(height?: number) {
     // Make sure we have an editor
     if (!this.editor) {
       return;
     }
 
-    // Make sure we have a model
-    const model = this.editor.getModel();
-    if (!model) {
-      return;
+    if (typeof height === "undefined") {
+      // Retrieve content height directly from the editor if no height provided as param
+      height = this.editor.getContentHeight();
     }
-
-    if (this.editorContainerRef && this.editorContainerRef.current) {
-      const expectedLines = this.props.numberOfLines || model.getLineCount();
-      // The find & replace menu takes up 2 lines, that is why 2 line is set as the minimum number of lines
-      const finalizedLines = Math.max(expectedLines, 1) + 1;
-      const lineHeight = this.editor.getOption(monaco.editor.EditorOption.lineHeight);
-      const contentHeight = finalizedLines * lineHeight;
-
-      if (this.contentHeight !== contentHeight) {
-        this.editorContainerRef.current.style.height = contentHeight + "px";
-        this.editor.layout();
-        this.contentHeight = contentHeight;
-      }
+    if (this.editorContainerRef && this.editorContainerRef.current && (this.contentHeight !== height)) {
+      this.editorContainerRef.current.style.height = height + "px";
+      /**
+       * With no params, the layout method queries the DOM to get the parent container dimensions
+       * This causes a forced layout by the browser
+       * We pass in the expected width and height to as an optimization to avoid the forced layout
+       */
+      this.editor.layout({ width: this.editor.getLayoutInfo().width, height });
+      this.contentHeight = height;
     }
   }
 
@@ -203,6 +193,10 @@ export default class MonacoEditor extends React.Component<IMonacoProps> {
         },
         model,
         overviewRulerLanes: 0,
+        padding: {
+          top: 12,
+          bottom: 5
+        },
         readOnly: this.props.readOnly,
         // Disable highlight current line, too much visual noise with it on.
         // VS Code also has it disabled for their notebook experience.
@@ -217,19 +211,18 @@ export default class MonacoEditor extends React.Component<IMonacoProps> {
           horizontalScrollbarSize: 0,
           arrowSize: 30
         },
-        scrollBeyondLastLine: false,
         theme: this.props.theme,
         value: this.props.value,
         // Apply custom settings from configuration
         ...this.props.options,
+        // this is required, otherwise the editor will continue to change its size on layout if set to true in options overrides
+        scrollBeyondLastLine: false
       });
 
       // Handle on create events
       if (this.props.onDidCreateEditor) {
         this.props.onDidCreateEditor(this.editor);
       }
-
-      this.addEditorTopMargin();
 
       // Handle custom keyboard shortcuts
       if (this.editor && this.props.shortcutsHandler && this.props.shortcutsOptions) {
@@ -265,7 +258,12 @@ export default class MonacoEditor extends React.Component<IMonacoProps> {
           this.editor.trigger("redo-event", "redo", {});
         }
       });
-
+      // Resize Editor container on content size change
+      this.editor.onDidContentSizeChange((info) => {
+        if (info.contentHeightChanged) {
+          this.calculateHeight(info.contentHeight);
+        }
+      });
       this.editor.onDidChangeModelContent(this.onDidChangeModelContent);
       this.editor.onDidFocusEditorText(this.onFocus);
       this.editor.onDidBlurEditorText(this.onBlur);
@@ -290,23 +288,6 @@ export default class MonacoEditor extends React.Component<IMonacoProps> {
     }
   }
 
-  addEditorTopMargin() {
-    if (this.editor) {
-      // Monaco editor doesn't have margins
-      // https://github.com/notable/notable/issues/551
-      // This is a workaround to add an editor area 12px padding at the top
-      // so that cursors decorators and context menus can be rendered correctly.
-      this.editor.changeViewZones((changeAccessor) => {
-        const domNode = document.createElement("div");
-        changeAccessor.addZone({
-          afterLineNumber: 0,
-          heightInPx: 12,
-          domNode
-        });
-      });
-    }
-  }
-
   /**
    * Tells editor to check the surrounding container size and resize itself appropriately
    */
@@ -317,7 +298,7 @@ export default class MonacoEditor extends React.Component<IMonacoProps> {
     }
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps: IMonacoProps) {
     if (!this.editor) {
       return;
     }
@@ -334,9 +315,10 @@ export default class MonacoEditor extends React.Component<IMonacoProps> {
     }
 
     // Ensures that the source contents of the editor (value) is consistent with the state of the editor
-    if (this.editor.getValue() !== this.props.value) {
+    // and the value has actually changed.
+    if (prevProps.value !== this.props.value && this.editor.getValue() !== this.props.value) {
       this.editor.setValue(this.props.value);
-    }
+    } 
 
     completionProvider.setChannels(this.props.channels);
 
@@ -363,7 +345,6 @@ export default class MonacoEditor extends React.Component<IMonacoProps> {
 
             // Set new model targeting the changed language.
             editor.setModel(monaco.editor.createModel(value, language, newUri));
-            this.addEditorTopMargin();
 
             // Restore cursor position to new model.
             if (position) {

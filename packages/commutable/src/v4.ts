@@ -232,7 +232,10 @@ export function outputToJS(output: ImmutableOutput): OnDiskOutput {
       return {
         output_type: output.output_type,
         name: output.name,
-        text: remultiline(output.text)
+        // Note: similar to createOnDiskMediaBundle, steam output could be very big e.g. stdout dumps a large chunk of text
+        //       calling remultiline on that will cause performance issue.
+        // TODO: figure out a configurable way to reformat the string when needed.
+        text: output.text
       };
     case "error":
       return {

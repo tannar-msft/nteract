@@ -2,69 +2,9 @@
 
 This document outlines logistics around how releases are handled in the nteract project, specifically the applications and npm packages within this repository.
 
-## Release Frequency
+## Release Process for Packages
 
-Production releases of nteract's npm packages, desktop app, and Jupyter extension will happen on a monthly cadence. Dev releases of nteract's npm packages will happen on a weekly basis. This segmentation allows users who are eager to grab the latest changes to do so at the existing pace of the weekly release cadence. Users who want more stable and less frequent releases can opt to consume from the production tag.
-
-## Release Process for Packages (dev)
-
-lerna will be used to publish packages in the dev channel on a weekly cadence.
-To publish nteract's npm packages to the dev channel, you must complete the 
-following steps.
-
-**Note: Prior to starting these steps, make sure that the `origin` remote is set to the
-nteract/nteract repo; otherwise step 4 will fail.**
-
-1. Ensure that you are on the main branch with the latest changes synced.
-2. Create a new branch with the `release/yyyymmdd` naming convention.
-   - Note: Before continuing, you will need to push this branch to `origin` using `git push origin HEAD`. This is because `lerna` expects the branch to be exist in the remote before it can push tags.
-3. Run `yarn clean && yarn && yarn build:all:ci` and validate that the project builds successfully.
-   - Validate that `yarn start` successfully launches the desktop app.
-4. Run the `npx lerna publish --dist-tag=prerelease` command in the root of the nteract repo.
-   - Use the `pre` version tags for each release. These are the version tags that end with `alpha.x`.
-5. Follow the prompts to increment the versions of each package as appropriate.
-   - Note that lerna will provide an output that lists the newly published versions of each package. Copy this as it will be relevant in later steps (changelog and PR).
-6. Create a new Markdown file in the `changelogs` directory that captures the changes in this release.
-   - The filename for this Markdown file should follow the `YYYY-MM-DD.md` naming convention.
-   - The contents of the file should be based on the `changelogs/changelog_template.md` template file.
-7. Commit the changes with the new markdown file.
-8. Open a PR against main from your `release/yyyymmdd` branch. In the description of the PR, include the versions of the published npm packages that the `lerna publish` command provides.
-9. Merge the PR into main.
-
-## Release Process for Packages (production)
-
-The release process for production packages is the same as the release process for dev packages. However, use `npx lerna publish` in Step #4 to publish the packages to the release channel.
-
-## Release Process for Snap
-
-Snap for nteract Desktop App is created and published using following steps: 
-
-#### Pre-Requisite
-- Install [snap](https://snapcraft.io/docs/installing-snapd)
-- Install snapcraft by `$ sudo snap install snapcraft`
-- Login to snapcraft CLI with Snapcraft developer account credentials by running `$ snapcraft login`
-
-#### Create and Publish
-
-1. Run `$ yarn dist` in the root of the project. it will create a `.snap` file at `/applications/desktop/dist`.
-2. Run `$ cd ./applications/desktop/dist` in root and then run `$ snapcraft push --release=edge nteract_xx.xx.xx-alpha.x_amd64.snap`
-
-> In step 2, make sure you are publishing to the right `--release` channel. It can be `stable`, `candidate`, `beta` or `edge`.
-
-#### Conflict in Snap
-
-Both, nteract desktop app and snapd automatically update the app when a new version is released. nteract desktop app auto-update when there is a release on the GitHub, while snapd auto-update when there is a release on snap-store.
-
-The conflict is, its really hard to predict the behaviour when a new version is released, as both the desktop app and snapd will try to update the app. Three possible cases are:
-
-**Case 1:** Snap update first
-- Then desktop won't auto-update, as it will already be on the latest release.
-
-**Case 2:** Desktop update first
-- Then Snap will still update.
-
-**Case 3:** Both trigger the update at the same time
-- It's a very rare case so possible outcome is very hard to predict.
+Releases for JavaScript packages in the monorepo happen automatically whenever a pull request is merged into the `main` branch of the repo. These automated releases are faciliated by the [semantic-release tool](https://github.com/semantic-release/semantic-release) release that is configured on the repo. In order to support automated releases, commits on this repo **MUST** follow the [conventional commit guidelines](https://www.conventionalcommits.org/en/v1.0.0/). This convention is enforced by a linter that runs on each invocation of `git commit`.
 
 ## Release Process for Desktop App
 
@@ -133,12 +73,3 @@ babby
 ```
 
 6.  Once you're ready click "Publish release". On macOS and Windows, the update will be automatically downloaded and installed on user's machines.
-
-## Release Process for the nteract Jupyter Extension
-
-To release the nteract Jupyter Extension, you will need to complete the following steps.
-
-1. Navigate to the `applications/jupyter-extension` directory within the nteract repo.
-2. Ensure that you are signed into PyPi on your machine and have permissions to publish the `nteract_on_jupyter` package.
-3. Run the `yarn build:python` command.
-4. Run the `yarn upload:pypi` command.

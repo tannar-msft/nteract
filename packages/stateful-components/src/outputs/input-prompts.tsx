@@ -49,19 +49,26 @@ export class PromptRequest extends React.PureComponent<Props, State> {
 
   render() {
     const { prompts } = this.props;
+    // Only the last prompt should be visible, beucase the rest have already been handled
+    // and we only store a single value in our state anyway. See #5592.
+    const prompt = prompts.last(undefined);
     return (
       <div className="nteract-cell-input-prompts">
-        {prompts.map(prompt => (
-          <form onSubmit={this.handleSubmitPromptReply}>
-            <label>{prompt.prompt}</label>
-            <input
-              type={prompt.password ? "password" : "text"}
-              value={this.state.value}
-              onChange={this.handleChange}
-            />
-            <input type="submit" />
-          </form>
-        ))}
+        {
+          prompt === undefined
+            ? null
+            : (
+              <form onSubmit={this.handleSubmitPromptReply}>
+                <label>{prompt.prompt}</label>
+                <input
+                  type={prompt.password ? "password" : "text"}
+                  value={this.state.value}
+                  onChange={this.handleChange}
+                />
+                <input type="submit"/>
+              </form>
+            )
+        }
       </div>
     );
   }

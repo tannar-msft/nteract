@@ -8,7 +8,7 @@ export const authenticate = async (target: AuthTarget) => {
   const electronRemote = require("electron").remote;
   const win = new electronRemote.BrowserWindow({
     show: false,
-    webPreferences: { zoomFactor: 0.75, nodeIntegration: true },
+    webPreferences: { zoomFactor: 0.75, nodeIntegration: true, enableRemoteModule: true },
   });
 
   return await new Promise<string>(

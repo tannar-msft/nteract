@@ -1,32 +1,109 @@
 {
   "name": "@nteract/connected-components",
-  "version": "6.8.10",
+  "version": "6.9.0",
   "description": "Connected components exported from @nteract/core",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "nteractDesktop": "src/index.tsx",
-  "scripts": {},
-  "repository": "https://github.com/nteract/nteract/tree/master/packages/notebook-app-component",
+  "scripts": {
+    "release": "semantic-release -e semantic-release-monorepo --tag-format='@nteract/connected-components@${version}'"
+  },
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
     "@blueprintjs/core": "^3.7.0",
-    "@nteract/commutable": "^7.4.4",
-    "@nteract/core": "^15.1.8",
-    "@nteract/types": "^7.1.8",
-    "react-redux": "^6.0.0",
+    "@nteract/commutable": "^7.4.5",
+    "@nteract/core": "^15.1.9",
+    "@nteract/types": "^7.1.9",
     "redux": "^4.0.0"
   },
   "peerDependencies": {
     "immutable": "^4.0.0-rc.12",
     "react": "^16.3.2",
+    "react-redux": "^7.2.5",
     "styled-components": ">= 5.0.1"
   },
   "author": "Kyle Kelley <rgbkrk@gmail.com>",
   "license": "BSD-3-Clause",
   "devDependencies": {
-    "@nteract/fixtures": "^2.3.18",
+    "@nteract/fixtures": "^2.3.19",
     "styled-components": "^5.0.1"
+  },
+  "release": {
+    "plugins": [
+      [
+        "@semantic-release/commit-analyzer",
+        {
+          "preset": "conventionalcommits"
+        }
+      ],
+      [
+        "@semantic-release/release-notes-generator",
+        {
+          "preset": "conventionalcommits",
+          "presetConfig": {
+            "header": "Release Notes",
+            "types": [
+              {
+                "type": "feat",
+                "section": "Features"
+              },
+              {
+                "type": "fix",
+                "section": "Bug Fixes"
+              },
+              {
+                "type": "chore",
+                "hidden": true
+              },
+              {
+                "type": "docs",
+                "hidden": true
+              },
+              {
+                "type": "style",
+                "hidden": true
+              },
+              {
+                "type": "refactor",
+                "hidden": true
+              },
+              {
+                "type": "perf",
+                "hidden": true
+              },
+              {
+                "type": "test",
+                "hidden": true
+              }
+            ]
+          },
+          "parserOpts": {
+            "noteKeywords": [
+              "BREAKING CHANGE",
+              "BREAKING CHANGES",
+              "BREAKING"
+            ]
+          },
+          "writerOpts": {
+            "commitsSort": [
+              "subject",
+              "scope"
+            ]
+          }
+        }
+      ],
+      "@semantic-release/npm",
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "package.json"
+          ],
+          "message": "chore(release): ${nextRelease.version}"
+        }
+      ]
+    ]
   }
 }

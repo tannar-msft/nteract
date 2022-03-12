@@ -26,7 +26,7 @@ export function launch(filename?: string) {
     icon: iconPath,
     title: "nteract",
     show: false,
-    webPreferences: { nodeIntegration: true }
+    webPreferences: { nodeIntegration: true, enableRemoteModule: true, contextIsolation: false }
   });
 
   win.once("ready-to-show", () => {

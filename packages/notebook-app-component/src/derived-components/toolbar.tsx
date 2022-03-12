@@ -231,7 +231,7 @@ export default class Toolbar extends React.PureComponent<
                           )}
                           tabIndex={0}
                         >
-                          <Icons.AddCell />
+                          <Icons.AddCell below={false} />
                           <a>Add Cell Above</a>
                         </CellMenuItem>
                         <CellMenuItem
@@ -328,7 +328,7 @@ export default class Toolbar extends React.PureComponent<
                           )}
                           tabIndex={0}
                         >
-                          <Icons.AddCell />
+                          <Icons.AddCell below={false} />
                           <a>Add Cell Above</a>
                         </CellMenuItem>
                         <CellMenuItem

@@ -1,6 +1,6 @@
 import { createMessage, JupyterMessage } from "@nteract/messaging";
 import { Subject } from "rxjs";
-import * as Monaco from "monaco-editor";
+import * as Monaco from "monaco-editor/esm/vs/editor/editor.api";
 import { completionProvider } from "../src/completions/completionItemProvider";
 import * as editorBase from "../src/editor-base";
 
@@ -32,7 +32,7 @@ describe("Completions should not get trigerred when channels/messages are missin
 
     completionProvider.provideCompletionItems(testModel, testPos).then((result) => {
       expect(result).toHaveProperty("suggestions");
-      expect(result.suggestions.length).toEqual(0);
+      expect(result.suggestions).toHaveLength(0);
       done();
     });
   });
@@ -44,7 +44,7 @@ describe("Completions should not get trigerred when channels/messages are missin
 
     completionProvider.provideCompletionItems(testModel, testPos).then((result) => {
       expect(result).toHaveProperty("suggestions");
-      expect(result.suggestions.length).toEqual(0);
+      expect(result.suggestions).toHaveLength(0);
       done();
     });
     channels.complete();
@@ -58,7 +58,7 @@ describe("Completions should not get trigerred when channels/messages are missin
 
     completionProvider.provideCompletionItems(testModel, testPos).then((result) => {
       expect(result).toHaveProperty("suggestions");
-      expect(result.suggestions.length).toEqual(0);
+      expect(result.suggestions).toHaveLength(0);
       done();
     });
     // No suggestions should be provided for incompatible message type
@@ -81,7 +81,7 @@ describe("Completions should not get trigerred when channels/messages are missin
 
     completionProvider.provideCompletionItems(testModel, testPos).then((result) => {
       expect(result).toHaveProperty("suggestions");
-      expect(result.suggestions.length).toEqual(0);
+      expect(result.suggestions).toHaveLength(0);
       done();
     });
     // Although we have a complete reply message, it is not the child of the appropriate complete_request message
@@ -113,7 +113,7 @@ describe("Appropriate completions should be provided", () => {
     completionProvider.provideCompletionItems(testModel, testPos).then((result) => {
       expect(result).toHaveProperty("suggestions");
       const returnedSuggestions = result.suggestions;
-      expect(returnedSuggestions.length).toEqual(1);
+      expect(returnedSuggestions).toHaveLength(1);
       expect(returnedSuggestions[0].kind).toEqual(Monaco.languages.CompletionItemKind.Field);
       expect(returnedSuggestions[0].insertText).toEqual("some_completion");
       done();
@@ -139,7 +139,7 @@ describe("Appropriate completions should be provided", () => {
     completionProvider.provideCompletionItems(testModel, testPos).then((result) => {
       expect(result).toHaveProperty("suggestions");
       const returnedSuggestions = result.suggestions;
-      expect(returnedSuggestions.length).toEqual(2);
+      expect(returnedSuggestions).toHaveLength(2);
       expect(returnedSuggestions[0].kind).toEqual(Monaco.languages.CompletionItemKind.Field);
       expect(returnedSuggestions[0].insertText).toEqual("completion1");
       expect(returnedSuggestions[1].kind).toEqual(Monaco.languages.CompletionItemKind.Field);
@@ -174,7 +174,7 @@ describe("Appropriate completions should be provided", () => {
     completionProvider.provideCompletionItems(testModel, testPos).then((result) => {
       expect(result).toHaveProperty("suggestions");
       const returnedSuggestions = result.suggestions;
-      expect(returnedSuggestions.length).toEqual(1);
+      expect(returnedSuggestions).toHaveLength(1);
       expect(returnedSuggestions[0].kind).toEqual(Monaco.languages.CompletionItemKind.Keyword);
       expect(returnedSuggestions[0].insertText).toEqual("some_completion");
       done();
@@ -202,7 +202,7 @@ describe("Appropriate completions should be provided", () => {
     completionProvider.provideCompletionItems(testModel, testPos).then((result) => {
       expect(result).toHaveProperty("suggestions");
       const returnedSuggestions = result.suggestions;
-      expect(returnedSuggestions.length).toEqual(1);
+      expect(returnedSuggestions).toHaveLength(1);
       expect(returnedSuggestions[0].kind).toEqual(Monaco.languages.CompletionItemKind.Field);
       expect(returnedSuggestions[0].insertText).toEqual("some_completion");
       done();
@@ -228,7 +228,7 @@ describe("Appropriate completions should be provided", () => {
     completionProvider.provideCompletionItems(testModel, testPos).then((result) => {
       expect(result).toHaveProperty("suggestions");
       const returnedSuggestions = result.suggestions;
-      expect(returnedSuggestions.length).toEqual(2);
+      expect(returnedSuggestions).toHaveLength(2);
       expect(returnedSuggestions[0].kind).toEqual(Monaco.languages.CompletionItemKind.Field);
       expect(returnedSuggestions[0].label).toEqual("itemB");
       expect(returnedSuggestions[0].insertText).toEqual("itemB");

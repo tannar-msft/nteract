@@ -578,7 +578,7 @@ function acceptPayloadMessage(
         type: actionTypes.CREATE_CELL_BELOW,
         payload: {
           cellType: "code",
-          cell: emptyCodeCell.setIn("source", payload.text || ""),
+          cell: emptyCodeCell.setIn(["source"], payload.text || ""),
           id,
           contentRef: action.payload.contentRef,
         },

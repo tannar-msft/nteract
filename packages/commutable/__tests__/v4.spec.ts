@@ -4,7 +4,8 @@ import {
   makeDisplayData,
   makeErrorOutput,
   makeExecuteResult,
-  makeStreamOutput
+  makeStreamOutput,
+  OnDiskStreamOutput
 } from "../src/outputs";
 import {
   createCodeCell,
@@ -55,6 +56,13 @@ describe("outputToJS", () => {
     expect(outputToJS(displayDataOutput).output_type).toEqual("display_data");
     expect(outputToJS(streamOutput).output_type).toEqual("stream");
     expect(outputToJS(errorOutput).output_type).toEqual("error");
+  });
+
+  it("stream output does not reformat multiline string", () => {
+    const text = "line1\r\nline2\rline3\nline4\n\n\r\n\r\r\n";
+    const streamOutput = makeStreamOutput().set("text", text)
+    const outputJS = outputToJS(streamOutput) as OnDiskStreamOutput;
+    expect(outputJS.text).toEqual(text);
   });
 });
 
